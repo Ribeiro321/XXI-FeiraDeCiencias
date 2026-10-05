@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="Tema Principal — Grupo XXI | Feira de Ciências da ETER FAETEC">
+
+  <title>Tema Principal | Grupo XXI</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    /* =====================================================
+       PESQUISAS EXPANSÍVEIS
+    ===================================================== */
+  
+    .topic-detail {
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+  
+      transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+    }
+  
+    .topic-header {
+      display: grid;
+      grid-template-columns: 110px 1fr 46px;
+      align-items: center;
+      gap: 25px;
+  
+      width: 100%;
+      cursor: pointer;
+      user-select: none;
+  
+      transition:
+        padding 0.45s ease,
+        gap 0.45s ease;
+    }
+  
+    .topic-header:hover {
+      opacity: 0.88;
+    }
+  
+    .topic-header:focus-visible {
+      outline: 2px solid var(--accent, #27e1a2);
+      outline-offset: 8px;
+      border-radius: 8px;
+    }
+  
+  
+    /* =====================================================
+       TÍTULO NORMAL
+    ===================================================== */
+  
+    .topic-header h2 {
+      margin: 0;
+  
+      font-size: 1.65rem;
+  
+      transition:
+        font-size 0.45s cubic-bezier(.22, 1, .36, 1),
+        transform 0.45s cubic-bezier(.22, 1, .36, 1),
+        opacity 0.35s ease;
+    }
+  
+  
+    /* =====================================================
+       TÍTULO MENOR QUANDO ABERTO
+    ===================================================== */
+  
+    .topic-detail.open .topic-header h2 {
+  
+      font-size: 1.15rem;
+  
+      transform: translateY(-2px);
+  
+    }
+  
+  
+    /* =====================================================
+       LABEL
+    ===================================================== */
+  
+    .topic-label {
+      margin: 0;
+  
+      transition:
+        transform 0.4s ease,
+        opacity 0.3s ease;
+    }
+  
+    .topic-detail.open .topic-label {
+      transform: scale(0.9);
+      opacity: 0.75;
+    }
+  
+  
+    /* =====================================================
+       TEXTO "CLIQUE PARA..."
+    ===================================================== */
+  
+    .click-hint {
+      display: block;
+  
+      margin-top: 7px;
+  
+      font-size: 0.72rem;
+      color: var(--muted, #8d949e);
+  
+      transition:
+        opacity 0.3s ease,
+        transform 0.35s ease;
+    }
+  
+    .topic-detail.open .click-hint {
+      opacity: 0.55;
+      transform: translateY(-2px);
+    }
+  
+  
+    /* =====================================================
+       SETA
+    ===================================================== */
+  
+    .topic-arrow {
+      width: 42px;
+      height: 42px;
+  
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+  
+      font-size: 19px;
+      color: var(--accent, #27e1a2);
+  
+      transition:
+        transform 0.45s cubic-bezier(.22, 1, .36, 1),
+        background 0.3s ease,
+        border-color 0.3s ease;
+    }
+  
+    .topic-detail.open .topic-arrow {
+      transform: rotate(180deg);
+  
+      background: rgba(39, 225, 162, 0.08);
+      border-color: rgba(39, 225, 162, 0.35);
+    }
+  
+  
+    /* =====================================================
+       ÁREA DA PESQUISA
+    ===================================================== */
+  
+    .topic-content {
+  
+      display: grid;
+  
+      grid-template-rows: 0fr;
+  
+      opacity: 0;
+  
+      margin-top: 0;
+  
+      transition:
+        grid-template-rows 0.55s cubic-bezier(.22, 1, .36, 1),
+        opacity 0.35s ease,
+        margin-top 0.45s ease;
+    }
+  
+  
+    .topic-content-inner {
+  
+      min-height: 0;
+      overflow: hidden;
+    }
+  
+  
+    /* =====================================================
+       PESQUISA ABERTA
+    ===================================================== */
+  
+    .topic-detail.open .topic-content {
+  
+      grid-template-rows: 1fr;
+  
+      opacity: 1;
+  
+      margin-top: 25px;
+    }
+  
+  
+    .topic-content-inner > *:first-child {
+      margin-top: 0;
+    }
+  
+    .topic-content-inner > *:last-child {
+      margin-bottom: 0;
+    }
+  
+  
+    /* =====================================================
+       LINHA LATERAL
+    ===================================================== */
+  
+    .topic-detail::before {
+  
+      content: "";
+  
+      position: absolute;
+  
+      left: 0;
+      top: 0;
+  
+      width: 3px;
+      height: 0;
+  
+      background: linear-gradient(
+        180deg,
+        var(--accent, #27e1a2),
+        var(--accent-2, #6c63ff)
+      );
+  
+      transition: height 0.55s ease;
+    }
+  
+    .topic-detail.open::before {
+      height: 100%;
+    }
+  
+  
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+  
+    @media (max-width: 700px) {
+  
+      .topic-header {
+        grid-template-columns: 1fr 42px;
+        gap: 15px;
+      }
+  
+      .topic-header .topic-label {
+        display: none;
+      }
+  
+      .topic-header h2 {
+        font-size: 1.35rem;
+      }
+  
+      .topic-detail.open .topic-header h2 {
+        font-size: 1rem;
+      }
+  
+      .topic-detail.open .topic-content {
+        margin-top: 20px;
+      }
+  
+    }
+  </style>
+
+</head>
+
+
+<body>
+
+  <div class="tech-bg"></div>
+
+
+  <!-- ================= HEADER ================= -->
+
+  <header class="header">
+
+    <a class="brand" href="index.html">
+
+      <span class="brand-mark">
+        XXI
+      </span>
+
+      <span>
+        <strong>ETER FAETEC</strong>
+        <small>Feira de Ciências</small>
+      </span>
+
+    </a>
+
+
+    <button
+      class="menu-btn"
+      type="button"
+      aria-label="Abrir menu"
+    >
+      ☰
+    </button>
+
+
+    <nav class="nav">
+
+      <a href="index.html">
+        Introdução
+      </a>
+
+      <a class="active" href="tema.html">
+        Tema Principal
+      </a>
+
+      <a href="equipe.html">
+        Equipe
+      </a>
+
+    </nav>
+
+  </header>
+
+
+  <!-- ================= CONTEÚDO ================= -->
+
+  <main>
+
+
+    <!-- ================= HERO ================= -->
+
+    <section class="page-hero section">
+
+      <span class="eyebrow">
+        <span class="dot"></span>
+        GRUPO XXI • PESQUISA
+      </span>
+
+      <h1>
+        Tema <span>Principal</span>
+      </h1>
+
+      <p>
+        Jovens no tráfico: vulnerabilidade e ausência do Estado.
+      </p>
+
+    </section>
+
+
+    <!-- ================= LISTA ================= -->
+
+    <section class="section topic-list">
+
+
+      <!-- =================================================
+           01
+      ================================================== -->
+
+      <article class="topic-detail featured">
+
+        <div
+          class="topic-header"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+
+          <div class="topic-label">
+            01 / ABERTURA
+          </div>
+
+          <div>
+
+            <h2>
+              Introdução e Contextualização
+            </h2>
+
+            <span class="click-hint">
+              Clique para abrir a pesquisa
+            </span>
+
+          </div>
+
+          <div class="topic-arrow">
+            ↓
+          </div>
+
+        </div>
+
+
+        <div class="topic-content">
+
+          <div class="topic-content-inner">
+
+            <p>
+              A entrada cada vez mais cedo de crianças e adolescentes no tráfico de drogas nas favelas e periferias brasileiras é uma das situações mais graves do nosso país. Esse problema é muito complexo e não acontece por uma simples escolha individual ou falta de caráter do jovem.
+            </p>
+
+            <p>
+              Na verdade, o envolvimento precoce com o tráfico pode estar relacionado à falta de apoio do governo, à ausência de investimentos históricos nessas regiões e à desigualdade social, que dificulta o acesso de muitos jovens a direitos básicos.
+            </p>
+
+            <p>
+              Para entender essa realidade, precisamos falar sobre o que é a vulnerabilidade social. Ela vai muito além da falta de dinheiro. A vulnerabilidade também está relacionada à falta de moradia digna, saneamento básico, áreas de lazer, esporte e cultura, além da ausência de apoio adequado para as famílias.
+            </p>
+
+            <p>
+              Quando o Estado não garante serviços básicos e oportunidades para a comunidade, cria-se um espaço de abandono. Em algumas situações, esse espaço pode ser ocupado pelo crime organizado, que passa a exercer influência sobre a região e sobre os jovens.
+            </p>
+
+            <p>
+              O abandono escolar também é um ponto importante nessa questão. Escolas públicas localizadas em regiões vulneráveis podem enfrentar problemas de estrutura e falta de recursos. Além disso, alguns jovens abandonam os estudos devido à necessidade de ajudar financeiramente suas famílias.
+            </p>
+
+            <p>
+              Sem conseguir um emprego formal ou uma oportunidade de curso profissionalizante, o tráfico pode aparecer como uma alternativa de renda rápida. Além da questão financeira, existe também uma dimensão emocional e social.
+            </p>
+
+            <p>
+              A sociedade muitas vezes associa sucesso a roupas de marca, celulares modernos, dinheiro, status e poder. O tráfico pode explorar esse desejo oferecendo aos jovens não apenas dinheiro, mas também uma sensação de pertencimento, respeito e importância dentro de um grupo.
+            </p>
+
+            <p>
+              Outro problema grave é a forma como o governo tenta enfrentar a situação, muitas vezes priorizando operações policiais e confrontos armados. A violência não resolve as causas sociais do problema e pode atingir diretamente os moradores das comunidades.
+            </p>
+
+            <p>
+              Diante disso, fica claro que a entrada de jovens no tráfico precisa ser tratada como um problema que envolve educação, saúde, assistência social, segurança pública e direitos humanos. A solução não deve se limitar à punição, mas também precisa oferecer oportunidades reais para esses jovens.
+            </p>
+
+            <h3>
+              Fontes e bases de dados
+            </h3>
+
+            <ul>
+              <li>UNICEF Brasil — direitos da infância, evasão escolar e vulnerabilidade social.</li>
+              <li>Fórum Brasileiro de Segurança Pública — violência e recrutamento de adolescentes pelo crime organizado.</li>
+              <li>IPEA / Atlas da Violência — violência contra a juventude e desigualdade social.</li>
+              <li>IBGE — dados relacionados à pobreza, desemprego e educação.</li>
+              <li>Observatório de Favelas — pesquisas sobre jovens e comunidades.</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- =================================================
+           02
+      ================================================== -->
+
+      <article class="topic-detail">
+
+        <div
+          class="topic-header"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+
+          <div class="topic-label">
+            02
+          </div>
+
+          <div>
+
+            <h2>
+              Fator Econômico
+            </h2>
+
+            <span class="click-hint">
+              Clique para abrir a pesquisa
+            </span>
+
+          </div>
+
+          <div class="topic-arrow">
+            ↓
+          </div>
+
+        </div>
+
+
+        <div class="topic-content">
+
+          <div class="topic-content-inner">
+
+            <p>
+              O principal motivo econômico relacionado à entrada precoce de jovens da favela no tráfico de drogas é a necessidade financeira imediata associada à escassez de alternativas no mercado de trabalho formal.
+            </p>
+
+            <p>
+              Muitos jovens vivem em famílias que enfrentam dificuldades financeiras e precisam começar a trabalhar cedo para ajudar nas despesas de casa. Entretanto, devido à idade, à falta de experiência profissional e à baixa escolaridade, as oportunidades disponíveis podem ser bastante limitadas.
+            </p>
+
+            <p>
+              Nesse contexto, o tráfico pode apresentar uma falsa sensação de oportunidade, oferecendo dinheiro de maneira rápida em comparação com empregos formais de baixa remuneração.
+            </p>
+
+            <p>
+              A evasão escolar também pode estar relacionada a esse processo. Quando o jovem deixa a escola para ajudar financeiramente a família, suas possibilidades de conseguir uma profissão estável no futuro podem diminuir.
+            </p>
+
+            <p>
+              Entre os principais fatores econômicos estão o custo de oportunidade, a necessidade de sustento familiar, o desemprego, a pobreza e a dificuldade de acesso ao primeiro emprego.
+            </p>
+
+            <p>
+              Dessa forma, combater o problema exige ampliar o acesso à educação, à qualificação profissional, ao primeiro emprego e a programas de geração de renda.
+            </p>
+
+            <h3>
+              Fonte
+            </h3>
+
+            <p>
+              Portal G1 / Rede Globo e demais referências utilizadas na pesquisa do grupo.
+            </p>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- =================================================
+           03
+      ================================================== -->
+
+      <article class="topic-detail">
+
+        <div
+          class="topic-header"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+
+          <div class="topic-label">
+            03
+          </div>
+
+          <div>
+
+            <h2>
+              Fatores Sociais
+            </h2>
+
+            <span class="click-hint">
+              Clique para abrir a pesquisa
+            </span>
+
+          </div>
+
+          <div class="topic-arrow">
+            ↓
+          </div>
+
+        </div>
+
+
+        <div class="topic-content">
+
+          <div class="topic-content-inner">
+
+            <p>
+              Quando se pergunta por que jovens periféricos se envolvem com o crime, muitas respostas são relacionadas ao dinheiro. Porém, os motivos também envolvem fatores sociais, familiares e culturais.
+            </p>
+
+            <p>
+              A vulnerabilidade econômica, a dificuldade de permanecer na escola, a ausência do Estado, a influência do ambiente, a busca por status e a necessidade de pertencimento podem contribuir para aumentar a vulnerabilidade desses jovens.
+            </p>
+
+            <p>
+              A escola possui um papel importante na formação dos adolescentes, pois proporciona educação, convivência social, disciplina e perspectivas de futuro. Quando o jovem abandona os estudos, pode perder uma importante rede de proteção.
+            </p>
+
+            <p>
+              A ausência do Estado também contribui para o problema. Quando serviços públicos essenciais não chegam de maneira adequada às comunidades, grupos criminosos podem ocupar espaços de influência e exercer poder local.
+            </p>
+
+            <p>
+              A vulnerabilidade familiar também merece atenção. Famílias que enfrentam dificuldades financeiras, conflitos, ausência de apoio ou outras situações de vulnerabilidade podem ter mais dificuldade para acompanhar e proteger os adolescentes.
+            </p>
+
+            <p>
+              Por isso, a prevenção deve envolver escolas, famílias, comunidade, assistência social, projetos culturais e esportivos e políticas públicas.
+            </p>
+
+            <h3>
+              Fontes
+            </h3>
+
+            <ul>
+              <li>CESeC</li>
+              <li>Alma Preta</li>
+              <li>OAB Mato Grosso</li>
+              <li>BBC Brasil</li>
+              <li>SciELO</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- =================================================
+           04
+      ================================================== -->
+
+      <article class="topic-detail">
+
+        <div
+          class="topic-header"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+
+          <div class="topic-label">
+            04
+          </div>
+
+          <div>
+
+            <h2>
+              Fator Psicológico
+            </h2>
+
+            <span class="click-hint">
+              Clique para abrir a pesquisa
+            </span>
+
+          </div>
+
+          <div class="topic-arrow">
+            ↓
+          </div>
+
+        </div>
+
+
+        <div class="topic-content">
+
+          <div class="topic-content-inner">
+
+            <p>
+              O envolvimento de jovens com o tráfico também pode ser analisado a partir de fatores psicológicos. Jovens moradores de regiões periféricas podem conviver diariamente com situações de violência, exclusão social e ausência de oportunidades.
+            </p>
+
+            <p>
+              A proposta não é criar um estigma sobre a juventude periférica, mas compreender como fatores sociais e psicológicos podem contribuir para situações de vulnerabilidade.
+            </p>
+
+            <p>
+              A exposição constante à violência pode produzir efeitos emocionais profundos, como medo, ansiedade, insegurança e naturalização da violência.
+            </p>
+
+            <p>
+              A necessidade de pertencimento também possui grande importância. Um grupo criminoso pode oferecer ao jovem uma sensação de acolhimento, reconhecimento, identidade coletiva e importância social.
+            </p>
+
+            <p>
+              A busca por identidade e reconhecimento, a baixa autoestima, a desesperança e a exposição precoce ao sofrimento podem tornar alguns jovens mais vulneráveis à influência de grupos criminosos.
+            </p>
+
+            <p>
+              Por esse motivo, políticas de prevenção precisam considerar também a saúde mental e o desenvolvimento emocional dos adolescentes.
+            </p>
+
+            <p>
+              O enfrentamento exige ações integradas envolvendo escola, família, comunidade, assistência social, profissionais de saúde mental, organizações da sociedade civil e poder público.
+            </p>
+
+            <h3>
+              Fontes
+            </h3>
+
+            <p>
+              Estudos acadêmicos, pesquisas sobre juventude e vulnerabilidade social e referências utilizadas no desenvolvimento da pesquisa.
+            </p>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- =================================================
+           05
+      ================================================== -->
+
+      <article class="topic-detail">
+
+        <div
+          class="topic-header"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+
+          <div class="topic-label">
+            05
+          </div>
+
+          <div>
+
+            <h2>
+              Impacto Familiar
+            </h2>
+
+            <span class="click-hint">
+              Clique para abrir a pesquisa
+            </span>
+
+          </div>
+
+          <div class="topic-arrow">
+            ↓
+          </div>
+
+        </div>
+
+
+        <div class="topic-content">
+
+          <div class="topic-content-inner">
+
+            <p>
+              A entrada de crianças e adolescentes no tráfico de drogas é um problema social relacionado a fatores como vulnerabilidade social, pobreza, falta de oportunidades, evasão escolar, influência do ambiente e busca por reconhecimento, pertencimento e melhores condições financeiras.
+            </p>
+
+            <p>
+              Atualmente, as redes sociais também podem contribuir para a construção de uma imagem idealizada do crime, apresentando uma falsa ideia de poder, respeito, dinheiro e status.
+            </p>
+
+            <p>
+              Além de afetar diretamente o jovem, o envolvimento com o tráfico provoca consequências profundas para toda a família.
+            </p>
+
+            <p>
+              Pais, irmãos e outros familiares podem viver em constante preocupação com a segurança do adolescente, principalmente diante da possibilidade de prisão, violência ou morte.
+            </p>
+
+            <p>
+              O impacto familiar também envolve medo, sofrimento emocional, conflitos e insegurança.
+            </p>
+
+            <p>
+              Por outro lado, a família pode desempenhar um importante papel de proteção. O diálogo, a presença dos responsáveis, o acompanhamento escolar e o fortalecimento dos vínculos familiares podem contribuir para diminuir situações de vulnerabilidade.
+            </p>
+
+            <p>
+              A prevenção exige também educação, oportunidades de trabalho, esporte, cultura, assistência social, orientação sobre redes sociais e fortalecimento dos vínculos familiares.
+            </p>
+
+            <h3>
+              Fontes
+            </h3>
+
+            <ul>
+              <li>UNICEF Brasil</li>
+              <li>Fórum Brasileiro de Segurança Pública</li>
+              <li>Falcão — Meninos do Tráfico</li>
+              <li>Balanço Geral</li>
+              <li>Juízo</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- =================================================
+           06
+      ================================================== -->
+
+      <article class="topic-detail">
+
+        <div
+          class="topic-header"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+
+          <div class="topic-label">
+            06
+          </div>
+
+          <div>
+
+            <h2>
+              Segurança Pública
+            </h2>
+
+            <span class="click-hint">
+              Clique para abrir a pesquisa
+            </span>
+
+          </div>
+
+          <div class="topic-arrow">
+            ↓
+          </div>
+
+        </div>
+
+
+        <div class="topic-content">
+
+          <div class="topic-content-inner">
+
+            <p>
+              O papel da segurança pública no combate ao tráfico infantojuvenil envolve investigação especializada, proteção de crianças e adolescentes e integração entre diferentes instituições.
+            </p>
+
+            <p>
+              O combate deve envolver não apenas organizações criminosas, mas também a criação de alternativas como educação, esporte, cultura e qualificação profissional.
+            </p>
+
+            <p>
+              A segurança pública deve trabalhar em conjunto com escolas, famílias e projetos sociais para prevenir o recrutamento de jovens.
+            </p>
+
+            <p>
+              Outro ponto importante é o combate às organizações criminosas que recrutam menores de idade. A inteligência policial e as investigações especializadas podem ajudar a identificar responsáveis e enfraquecer essas estruturas.
+            </p>
+
+            <p>
+              Também é importante garantir presença constante do Estado nas comunidades, não apenas em momentos de operações policiais.
+            </p>
+
+            <p>
+              A reinserção social de jovens que já tiveram contato com o crime também deve fazer parte das estratégias de prevenção.
+            </p>
+
+            <p>
+              Dessa forma, segurança pública e políticas sociais precisam trabalhar juntas para enfrentar tanto as organizações criminosas quanto as condições que tornam os jovens vulneráveis ao recrutamento.
+            </p>
+
+            <h3>
+              Fontes
+            </h3>
+
+            <ul>
+              <li>Fórum Brasileiro de Segurança Pública</li>
+              <li>Ministério da Justiça e Segurança Pública</li>
+              <li>SciELO / Revista Dilemas</li>
+              <li>UNESP</li>
+              <li>Conselho Nacional de Justiça</li>
+              <li>Instituto Sou da Paz</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- =================================================
+           07
+      ================================================== -->
+
+      <article class="topic-detail">
+
+        <div
+          class="topic-header"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+
+          <div class="topic-label">
+            07
+          </div>
+
+          <div>
+
+            <h2>
+              Soluções Socioeconômicas
+            </h2>
+
+            <span class="click-hint">
+              Clique para abrir a pesquisa
+            </span>
+
+          </div>
+
+          <div class="topic-arrow">
+            ↓
+          </div>
+
+        </div>
+
+
+        <div class="topic-content">
+
+          <div class="topic-content-inner">
+
+            <p>
+              As soluções para esse problema precisam ser socioeconômicas, e não apenas policiais. A repressão sozinha não resolve as causas profundas da entrada precoce de jovens no tráfico.
+            </p>
+
+            <p>
+              Uma das soluções mais importantes é oferecer educação de qualidade, com apoio psicológico, alimentação, transporte, material escolar, professores preparados e acesso a cursos técnicos e profissionalizantes.
+            </p>
+
+            <p>
+              Outra medida fundamental é a geração de emprego e renda, por meio de programas de primeiro emprego, estágio, aprendizagem profissional e parcerias com empresas.
+            </p>
+
+            <p>
+              Também é importante fortalecer o empreendedorismo periférico e a economia solidária, oferecendo capacitação e apoio para pequenos negócios.
+            </p>
+
+            <p>
+              A assistência social possui papel central no acompanhamento dos jovens e das famílias em situação de vulnerabilidade.
+            </p>
+
+            <p>
+              Investimentos em cultura, esporte e lazer ajudam a fortalecer vínculos positivos, autoestima, disciplina e perspectivas de futuro.
+            </p>
+
+            <p>
+              A reinserção social também é necessária para jovens que já tiveram contato com o crime ou com medidas socioeducativas.
+            </p>
+
+            <p>
+              Em resumo, é necessário garantir educação, emprego, renda, assistência social, cultura, esporte, lazer e oportunidades reais para que os jovens possam construir um futuro diferente.
+            </p>
+
+            <h3>
+              Fontes
+            </h3>
+
+            <ul>
+              <li>Fórum Brasileiro de Segurança Pública</li>
+              <li>Observatório de Favelas</li>
+              <li>Instituto Locomotiva / DataFavela</li>
+              <li>Pronasci Juventude</li>
+              <li>Plano Juventude Negra Viva</li>
+            </ul>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- =================================================
+           08
+      ================================================== -->
+
+      <article class="topic-detail">
+
+        <div
+          class="topic-header"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+        >
+
+          <div class="topic-label">
+            08 / FINAL
+          </div>
+
+          <div>
+
+            <h2>
+              Soluções Socioculturais
+            </h2>
+
+            <span class="click-hint">
+              Clique para abrir a pesquisa
+            </span>
+
+          </div>
+
+          <div class="topic-arrow">
+            ↓
+          </div>
+
+        </div>
+
+
+        <div class="topic-content">
+
+          <div class="topic-content-inner">
+
+            <p>
+              Diante desse problema, ações da sociedade e da cultura podem ajudar a diminuir a vulnerabilidade de crianças e adolescentes e oferecer alternativas ao envolvimento com o crime.
+            </p>
+
+            <h3>
+              1. Educação de qualidade
+            </h3>
+
+            <p>
+              Investir em uma boa educação é fundamental para que os jovens compreendam que existem outros caminhos e possibilidades além da vida no crime. Uma escola acolhedora e de qualidade pode ampliar perspectivas e oportunidades.
+            </p>
+
+            <h3>
+              2. Esporte e lazer
+            </h3>
+
+            <p>
+              O esporte e o lazer oferecem aos jovens oportunidades de desenvolver disciplina, trabalho em equipe, respeito e autoestima. Além disso, podem criar espaços seguros de convivência.
+            </p>
+
+            <h3>
+              3. Cultura e arte
+            </h3>
+
+            <p>
+              Música, dança, teatro, pintura, fotografia e outras formas de expressão permitem que os jovens desenvolvam criatividade, descubram talentos e fortaleçam sua identidade.
+            </p>
+
+            <h3>
+              4. Fortalecimento da família
+            </h3>
+
+            <p>
+              O apoio da família é essencial para o desenvolvimento dos jovens. Programas de orientação aos responsáveis, acompanhamento psicológico e assistência social podem fortalecer os vínculos familiares.
+            </p>
+
+            <h3>
+              5. Oportunidades de estudo e trabalho
+            </h3>
+
+            <p>
+              Cursos profissionalizantes, programas de estágio, primeiro emprego e incentivo ao empreendedorismo aumentam as oportunidades de crescimento pessoal e profissional.
+            </p>
+
+            <p>
+              Portanto, soluções socioculturais devem atuar junto às medidas econômicas e de segurança pública. A prevenção precisa criar oportunidades, fortalecer vínculos e mostrar aos jovens que existem diferentes possibilidades para construir seu futuro.
+            </p>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- ================= CONCLUSÃO ================= -->
+
+    <section class="section source-note">
+
+      <div class="source-box">
+
+        <span class="source-icon">
+          ↗
+        </span>
+
+        <div>
+
+          <strong>
+            Conclusão da pesquisa
+          </strong>
+
+          <p>
+            A entrada precoce de jovens no tráfico de drogas é um problema complexo, influenciado por fatores econômicos, sociais, psicológicos, familiares e culturais. Por isso, não existe uma única solução.
+          </p>
+
+          <p>
+            O enfrentamento precisa combinar educação, geração de emprego e renda, assistência social, fortalecimento familiar, cultura, esporte, saúde mental e segurança pública.
+          </p>
+
+          <p>
+            Mais do que combater as consequências, é necessário diminuir as condições que tornam esses jovens vulneráveis ao recrutamento.
+          </p>
+
+          <p>
+            O objetivo deste trabalho é mostrar que oferecer oportunidades e garantir direitos pode ser uma das principais formas de prevenção e transformação social.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ================= FOOTER ================= -->
+
+  <footer class="footer">
+
+    <div>
+
+      <strong>
+        GRUPO XXI
+      </strong>
+
+      <span>
+        ETER FAETEC • Feira de Ciências
+      </span>
+
+    </div>
+
+    <div>
+      Projeto acadêmico • 2026
+    </div>
+
+  </footer>
+
+
+  <script src="js/script.js"></script>
+
+
+  <!-- =====================================================
+       SCRIPT — ABRIR / FECHAR PESQUISAS
+  ====================================================== -->
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const pesquisas = document.querySelectorAll(".topic-detail");
+
+      pesquisas.forEach(function (pesquisa) {
+
+        const cabecalho = pesquisa.querySelector(".topic-header");
+
+        if (!cabecalho) return;
+
+
+        function alternarPesquisa() {
+
+          const estaAberta = pesquisa.classList.contains("open");
+
+          if (estaAberta) {
+
+            pesquisa.classList.remove("open");
+
+            cabecalho.setAttribute(
+              "aria-expanded",
+              "false"
+            );
+
+          } else {
+
+            pesquisa.classList.add("open");
+
+            cabecalho.setAttribute(
+              "aria-expanded",
+              "true"
+            );
+
+          }
+
+        }
+
+
+        cabecalho.addEventListener(
+          "click",
+          alternarPesquisa
+        );
+
+
+        cabecalho.addEventListener(
+          "keydown",
+          function (evento) {
+
+            if (
+              evento.key === "Enter" ||
+              evento.key === " "
+            ) {
+
+              evento.preventDefault();
+
+              alternarPesquisa();
+
+            }
+
+          }
+        );
+
+      });
+
+    });
+
+  </script>
+
+</body>
+
+</html>
